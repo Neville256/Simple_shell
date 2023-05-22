@@ -4,9 +4,8 @@
  * get_history_file - gets the history file
  * @info: parameter struct
  *
- * Return: allocated string containg history file
+ * Return: allocated string containing history file
  */
-
 char *get_history_file(info_t *info)
 {
 	char *buffs, *dir;
@@ -17,8 +16,8 @@ char *get_history_file(info_t *info)
 	buffs = malloc(sizeof(char) * (_strlen(dir) + _strlen(HIST_FILE) + 2));
 	if (!buffs)
 		return (NULL);
-	buffs[0] = 0;
-	strcpy(buffs, dir);
+	buffs[0] = '\0';
+	_strcat(buffs, dir);
 	_strcat(buffs, "/");
 	_strcat(buffs, HIST_FILE);
 	return (buffs);
@@ -39,16 +38,16 @@ int write_history(info_t *info)
 	if (!filename)
 		return (-1);
 
-	fwd = open(filename, O_CREAT | O_TRUNC | O_RDWR, 0644);
+	fwd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	free(filename);
 	if (fwd == -1)
 		return (-1);
 	for (node = info->history; node; node = node->next)
 	{
 		_eputs(node->str, fwd);
-		putw('\n', fwd);
+		write(fwd, "\n", 1);
 	}
-	putw(BUF_FLUSH, fwd);
+	write(fwd, &BUF_FLUSH, 1);
 	close(fwd);
 	return (1);
 }
@@ -68,12 +67,11 @@ int read_history(info_t *info)
 
 	if (!filename)
 		return (0);
-
 	fwd = open(filename, O_RDONLY);
 	free(filename);
 	if (fwd == -1)
 		return (0);
-	if (!fstat(fwd, &st))
+	if (fstat(fwd, &st) == 0)
 		fsize = st.st_size;
 	if (fsize < 2)
 		return (0);
@@ -81,17 +79,19 @@ int read_history(info_t *info)
 	if (!buffs)
 		return (0);
 	rdlen = read(fwd, buffs, fsize);
-	buffs[fsize] = 0;
+	buffs[fsize] = '\0';
 	if (rdlen <= 0)
 		return (free(buffs), 0);
 	close(fwd);
 	for (k = 0; k < fsize; k++)
+	{
 		if (buffs[k] == '\n')
 		{
-			buffs[k] = 0;
+			buffs[k] = '\0';
 			build_history_list(info, buffs + last, linecount++);
 			last = k + 1;
 		}
+	}
 	if (last != k)
 		build_history_list(info, buffs + last, linecount++);
 	free(buffs);
@@ -106,7 +106,7 @@ int read_history(info_t *info)
  * build_history_list - adds entry to a history linked list
  * @info: Structure containing potential arguments.
  * @buf: buffer
- * @linecount: history linecount, history count
+ * @linecount: history line count
  *
  * Return: Always 0
  */
