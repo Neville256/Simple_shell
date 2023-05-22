@@ -55,7 +55,7 @@ int _mycd(info_t *info)
 	{
 		if (!_getenv(info, "OLDPWD="))
 		{
-			_puts("OLDPWD not set");
+			_eputs("OLDPWD not set");
 			_putchar('\n');
 			return (1);
 		}
@@ -90,8 +90,8 @@ int _myhelp(info_t *info)
 	char **arg_array;
 
 	arg_array = info->argv;
-	_puts("help call works. Function not yet implemented \n");
+	_eputs("help call works. Function not yet implemented \n");
 	if (arg_array[0])
-		_puts(*arg_array); /* temp att_unused workaround */
+		_eputs(*arg_array); /* temp att_unused workaround */
 	return (0);
 }

@@ -18,7 +18,7 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
 		/*bfree((void **)info->cmd_buf);*/
 		free(*buffs);
 		*buf = NULL;
-		signal(SIGINT, sigintHandler);
+		signal(SIGINT, signthandler);
 #if USE_GETLINE
 		r = getline(buffs, &len_p, stdin);
 #else
@@ -31,8 +31,8 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
 				(*buffs)[r - 1] = '\0'; /* remove trailing newline */
 				r--;
 			}
-			info->linecount_flag = 1;
-			remove_comments(*buffs);
+			info->lineamount_flag = 1;
+			comments_remove(*buffs);
 			build_history_list(info, *buffs, info->histcount++);
 			/* if (_strchr(*buf, ';')) is this a command chain? */
 			{
@@ -69,7 +69,7 @@ ssize_t get_input(info_t *info)
 		check_chain(info, buffs, &l, k, len);
 		while (l < len) /* iterate to semicolon or end */
 		{
-			if (is_chain(info, buf, &l))
+			if (is_chain(info, buf_p, &l))
 				break;
 			l++;
 		}
@@ -78,7 +78,7 @@ ssize_t get_input(info_t *info)
 		if (k >= len) /* reached end of buffer? */
 		{
 			k = len = 0; /* reset position and length */
-			info->cmd_buf_type = CMD_NORM;
+			info->cmd_buf_types = CMD_NORM;
 		}
 
 		*buf_p = o; /* pass back pointer to current command position */
@@ -103,7 +103,7 @@ ssize_t read_buf(info_t *info, char *buf, size_t *k)
 
 	if (*k)
 		return (0);
-	r = read(info->readfd, buf, READ_BUF_SIZE);
+	r = read(info->scanfd, buf, SCAN_BUF_SIZE);
 	if (r >= 0)
 		*k = r;
 	return (r);
@@ -119,7 +119,7 @@ ssize_t read_buf(info_t *info, char *buf, size_t *k)
  */
 int _getline(info_t *info, char **ptr, size_t *length)
 {
-	static char buffs[READ_BUF_SIZE];
+	static char buffs[SCAN_BUF_SIZE];
 	static size_t k, len;
 	size_t l;
 	ssize_t r = 0, t = 0;
@@ -135,16 +135,16 @@ int _getline(info_t *info, char **ptr, size_t *length)
 	if (r == -1 || (r == 0 && len == 0))
 		return (-1);
 
-	d = _strchr(buf + k, '\n');
+	d = strchr(buffs + k, '\n');
 	l = d ? 1 + (unsigned int)(d - buffs) : len;
 	new_p = _realloc(o, t, t ? t + l : l + 1);
 	if (!new_p) /* MALLOC FAILURE! */
 		return (o ? free(o), -1 : -1);
 
 	if (t)
-		_strncat(new_p, buffs + k, l - k);
+		_strcat(new_p, buffs + k, l - k);
 	else
-		_strncpy(new_p, buffs + k, l - k + 1);
+		strncpy(new_p, buffs + k, l - k + 1);
 
 	t += l - k;
 	k = l;
@@ -164,7 +164,7 @@ int _getline(info_t *info, char **ptr, size_t *length)
  */
 void sigintHandler(__attribute__((unused))int sig_num)
 {
-	_puts("\n");
-	_puts("$ ");
+	_eputs("\n");
+	_eputs("$ ");
 	_putchar(BUF_FLUSH);
 }

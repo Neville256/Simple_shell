@@ -87,7 +87,7 @@ int replace_alias(info_t *info)
 		if (!node)
 			return (0);
 		free(info->argv[k]);
-		o = _strchr(node->str, '=');
+		o = strchr(node->str, '=');
 		if (!o)
 			return (0);
 		o = _strdup(o + 1);

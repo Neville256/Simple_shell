@@ -29,9 +29,9 @@ void _eputs(char *str)
 int _eputchar(char d)
 {
 	static int k;
-	static char buffs[WRITE_BUF_SIZE];
+	static char buffs[NOTE_BUF_SIZE];
 
-	if (d == BUF_FLUSH || k >= WRITE_BUF_SIZE)
+	if (d == BUF_FLUSH || k >= NOTE_BUF_SIZE)
 	{
 		write(2, buffs, k);
 		k = 0;
@@ -52,9 +52,9 @@ int _eputchar(char d)
 int _putfwd(char d, int fwd)
 {
 	static int k;
-	static char buffs[WRITE_BUF_SIZE];
+	static char buffs[NOTE_BUF_SIZE];
 
-	if (d == BUF_FLUSH || k >= WRITE_BUF_SIZE)
+	if (d == BUF_FLUSH || k >= NOTE_BUF_SIZE)
 	{
 		write(fwd, buffs, k);
 		k = 0;
@@ -81,5 +81,5 @@ int _putsfwd(char *str, int fwd)
 	{
 		k += _putfwd(*str++, fwd);
 	}
-	return (i);
+	return (k);
 }

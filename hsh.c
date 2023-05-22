@@ -16,7 +16,7 @@ int hsh(info_t *info, char **av)
 	{
 		clear_info(info);
 		if (interactive(info))
-			_puts("$ ");
+			_eputs("$ ");
 		_eputchar(BUF_FLUSH);
 		r = get_input(info);
 		if (r != -1)
@@ -70,7 +70,7 @@ int find_builtin(info_t *info)
 	for (l = 0; builtintbl[l].type; l++)
 		if (_strcmp(info->argv[0], builtintbl[l].type) == 0)
 		{
-			info->line_count++;
+			info->line_amount++;
 			built_in_ret = builtintbl[l].func(info);
 			break;
 		}
@@ -89,10 +89,10 @@ void find_cmd(info_t *info)
 	int l, k;
 
 	info->path = info->argv[0];
-	if (info->linecount_flag == 1)
+	if (info->lineamount_flag == 1)
 	{
-		info->line_count++;
-		info->linecount_flag = 0;
+		info->line_amount++;
+		info->lineamount_flag = 0;
 	}
 	for (l = 0, k = 0; info->arg[l]; l++)
 		if (!is_delim(info->arg[l], " \t\n"))
