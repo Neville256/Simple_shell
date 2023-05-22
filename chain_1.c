@@ -126,6 +126,7 @@ int replace_vars(info_t *info)
 			continue;
 		}
 		list_t *node = node_starts_with(info->env, &(info->argv[k][1]), '=');
+
 		if (node)
 		{
 			restore_string(&(info->argv[k]),
@@ -145,7 +146,7 @@ int replace_vars(info_t *info)
  *
  * Return: 1 if replaced, 0 otherwise
  */
-int replace_string(char **old, char *new)
+int restore_string(char **old, char *new)
 {
 	free(*old);
 	*old = new;

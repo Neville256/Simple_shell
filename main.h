@@ -25,7 +25,7 @@
 
 /* This will transform_number() */
 #define TRANSFORM_LOWERCASE 1
-#define TRANSFROM_UNSIGNED 2
+#define TRANSFORM_UNSIGNED 2
 
 /*1 will use as system getline() */
 #define UTILIZE__GETLINE 0
@@ -168,7 +168,7 @@ int _erratoi(char *);
 void print_error(info_t *, char *);
 int print_d(int, int);
 char *convert_number(long int, int, int);
-void ceomments_remove(char *);
+void comments_remove(char *);
 
 /*emulators_builtin.c */
 int _myexit(info_t *);
