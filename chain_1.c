@@ -14,19 +14,19 @@ int is_chain(info_t *info, char *buf, size_t *o)
 
 	if (buf[l] == '|' && buf[l + 1] == '|')
 	{
-		buf[l] = 0;
+		buf[l] = '\0';
 		l++;
 		info->cmd_buf_types = CMD_OR;
 	}
 	else if (buf[l] == '&' && buf[l + 1] == '&')
 	{
-		buf[l] = 0;
+		buf[l] = '\0';
 		l++;
 		info->cmd_buf_types = CMD_AND;
 	}
 	else if (buf[l] == ';')
 	{
-		buf[l] = 0;
+		buf[l] = '\0';
 		info->cmd_buf_types = CMD_CHAIN;
 	}
 	else
@@ -53,7 +53,7 @@ void check_chain(info_t *info, char *buf, size_t *o, size_t k, size_t len)
 	{
 		if (info->status)
 		{
-			buf[k] = 0;
+			buf[k] = '\0';
 			l = len;
 		}
 	}
@@ -61,7 +61,7 @@ void check_chain(info_t *info, char *buf, size_t *o, size_t k, size_t len)
 	{
 		if (!info->status)
 		{
-			buf[k] = 0;
+			buf[k] = '\0';
 			l = len;
 		}
 	}
@@ -107,34 +107,40 @@ int replace_alias(info_t *info)
 int replace_vars(info_t *info)
 {
 	int k;
-
+	list_t *node;
+	
 	for (k = 0; info->argv[k]; k++)
 	{
+		char *str;
 		if (info->argv[k][0] != '$' || !info->argv[k][1])
 			continue;
 
 		if (!_strcmp(info->argv[k], "$?"))
 		{
-			restore_string(&(info->argv[k]),
-				_strdup(convert_number(info->status, 10, 0)));
+			str = _strdup(convert_number(info->status, 10, 0));
+			if (!str)
+				return (0);
+			restore_string(&(info->argv[k]), str);
 			continue;
 		}
 		if (!_strcmp(info->argv[k], "$$"))
 		{
-			restore_string(&(info->argv[k]),
-				_strdup(convert_number(getpid(), 10, 0)));
+			str = _strdup(convert_number(getpid(), 10, 0));
+			if (!str)
+				return (0);
+			restore_string(&(info->argv[k]), str);
 			continue;
 		}
-		list_t *node = node_starts_with(info->env, &(info->argv[k][1]), '=');
-
+		node = node_starts_with(info->env, &(info->argv[k][1]), '=');
 		if (node)
 		{
-			restore_string(&(info->argv[k]),
-				_strdup((const char*) strchr(node->str, '=') + 1));
+			str = _strdup((const char*)strchr(node->str, '=') + 1);
+			if (!str)
+				return (0);
+			restore_string(&(info->argv[k]), str);
 			continue;
 		}
 		restore_string(&(info->argv[k]), _strdup(""));
-
 	}
 	return (1);
 }
