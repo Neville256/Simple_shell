@@ -125,7 +125,7 @@ int loophsh(char **);
 void _eputs(char *);
 int _eputchar(char);
 int _putfwd(char d, int fwd);
-int _putfwd(char *str, int fwd);
+int _putsfwd(char *str, int fwd);
 
 /* functions_string_1.c */
 int _strlen(char *);
