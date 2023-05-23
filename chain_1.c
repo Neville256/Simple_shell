@@ -108,10 +108,11 @@ int replace_vars(info_t *info)
 {
 	int k;
 	list_t *node;
-	
+
 	for (k = 0; info->argv[k]; k++)
 	{
 		char *str;
+
 		if (info->argv[k][0] != '$' || !info->argv[k][1])
 			continue;
 
