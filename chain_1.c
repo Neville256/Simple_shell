@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * chain - test if current char buffer is a chain delimiter
+ * is_chain - test if current char buffer is a chain delimiter
  * @info: the parameter struct
  * @buf: the char buffer
  * @o: address of current position in buf

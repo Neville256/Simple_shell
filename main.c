@@ -1,4 +1,6 @@
 #include "main.h"
+#include <fcntl.h>
+#include <errno.h>
 
 /**
  * main - first entry
@@ -9,7 +11,7 @@
  */
 int main(int ac, char **av)
 {
-	info_t info[] = [INFO_INIT];
+	info_t info[] = {{0}};
 	int fd = 2;
 
 	asm("mov %1, %0\n\t"
@@ -17,29 +19,30 @@ int main(int ac, char **av)
 	: "=r" (fd)
 	: "r" (fd));
 
-if (ac == 2)
-{
-
-	fd = open(av[1],O_RDONLY);
-	if (fd == -1)
+	if (ac == 2)
 	{
-		if (errno == EACCES)
-			exit(126);
-		if (errno == ENOENT)
+		fd = open(av[1], O_RDONLY);
+		if (fd == -1)
 		{
-			_eputs(av[0]);
-			_eputs(": 0: Cannot open ");
-			_eputs(av[1]);
-			_eputchar('\n');
-			_eputchar(BUF_FLUSH);
-			exit(127);
+			if (errno == EACCES)
+				exit(126);
+			if (errno == ENOENT)
+			{
+				_eputs(av[0]);
+				_eputs(": 0: Cannot open ");
+				_eputs(av[1]);
+				_eputchar('\n');
+				_eputchar(BUF_FLUSH);
+				exit(127);
+			}
+			return (EXIT_FAILURE);
 		}
-		return (EXIT_FAILURE);
+		info->scanfd = fd;
 	}
-	info->scanfd = fd;
-}
-populate_env_list(info);
-scan_history(info);
-hsh(info, av);
-return (EXIT_SUCCESS);
+
+	populate_env_list(info);
+	scan_history(info);
+	hsh(info, av);
+
+	return (EXIT_SUCCESS);
 }
