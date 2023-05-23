@@ -223,9 +223,10 @@ list_t *node_starts_with(list_t *, char *, char);
 ssize_t get_node_index(list_t *, list_t *);
 
 /* chain_1.c */
-int is_chain(info_t *, char **, size_t *);
+int ischain(info_t *, char **, size_t *o);
 void check_chain(info_t *, char *, size_t *, size_t, size_t);
 int restore_alias(info_t *);
 int restore_vars(info_t *);
 int restore_string(char **, char *);
+
 #endif

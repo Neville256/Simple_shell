@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * is_chain - test if current char buffer is a chain delimiter
+ * chain - test if current char buffer is a chain delimiter
  * @info: the parameter struct
  * @buf: the char buffer
  * @o: address of current position in buf
@@ -14,19 +14,19 @@ int is_chain(info_t *info, char *buf, size_t *o)
 
 	if (buf[l] == '|' && buf[l + 1] == '|')
 	{
-		buf[l] = '\0';
+		buf[l] = 0;
 		l++;
 		info->cmd_buf_types = CMD_OR;
 	}
 	else if (buf[l] == '&' && buf[l + 1] == '&')
 	{
-		buf[l] = '\0';
+		buf[l] = 0;
 		l++;
 		info->cmd_buf_types = CMD_AND;
 	}
 	else if (buf[l] == ';')
 	{
-		buf[l] = '\0';
+		buf[l] = 0;
 		info->cmd_buf_types = CMD_CHAIN;
 	}
 	else
@@ -53,7 +53,7 @@ void check_chain(info_t *info, char *buf, size_t *o, size_t k, size_t len)
 	{
 		if (info->status)
 		{
-			buf[k] = '\0';
+			buf[k] = 0;
 			l = len;
 		}
 	}
@@ -61,7 +61,7 @@ void check_chain(info_t *info, char *buf, size_t *o, size_t k, size_t len)
 	{
 		if (!info->status)
 		{
-			buf[k] = '\0';
+			buf[k] = 0;
 			l = len;
 		}
 	}
@@ -111,37 +111,34 @@ int replace_vars(info_t *info)
 
 	for (k = 0; info->argv[k]; k++)
 	{
-		char *str;
-
 		if (info->argv[k][0] != '$' || !info->argv[k][1])
 			continue;
 
-		if (!_strcmp(info->argv[k], "$?"))
-		{
-			str = _strdup(convert_number(info->status, 10, 0));
-			if (!str)
-				return (0);
-			restore_string(&(info->argv[k]), str);
-			continue;
-		}
-		if (!_strcmp(info->argv[k], "$$"))
-		{
-			str = _strdup(convert_number(getpid(), 10, 0));
-			if (!str)
-				return (0);
-			restore_string(&(info->argv[k]), str);
-			continue;
-		}
 		node = node_starts_with(info->env, &(info->argv[k][1]), '=');
 		if (node)
 		{
-			str = _strdup((const char*)strchr(node->str, '=') + 1);
-			if (!str)
-				return (0);
-			restore_string(&(info->argv[k]), str);
-			continue;
+			char *value = strchr(node->str, '=') + 1;
+
+			restore_string(&(info->argv[k]), _strdup(value));
 		}
-		restore_string(&(info->argv[k]), _strdup(""));
+		else if (!_strcmp(info->argv[k], "$?"))
+		{
+			char *status_str = convert_number(info->status, 10, 0);
+
+			restore_string(&(info->argv[k]), _strdup(status_str));
+			free(status_str);
+		}
+		else if (!_strcmp(info->argv[k], "$$"))
+		{
+			char *pid_str = convert_number(getpid(), 10, 0);
+
+			restore_string(&(info->argv[k]), _strdup(pid_str));
+			free(pid_str);
+		}
+		else
+		{
+			restore_string(&(info->argv[k]), _strdup(""));
+		}
 	}
 	return (1);
 }
