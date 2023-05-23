@@ -78,6 +78,6 @@ if (c == BUF_FLUSH || k >= NOTE_BUF_SIZE)
 	k = 0;
 }
 if (c != BUF_FLUSH)
-	buf[k++] = c;
-	return (1);
+buf[k++] = c;
+return (1);
 }

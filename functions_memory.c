@@ -23,9 +23,9 @@ char *_memset(char *s, char b, unsigned int n)
  */
 void my_free(char **gg)
 {
-	if (!gg || !*gg)
-	return;
-	char **ptr = gg;
+
+	char **ptr;
+	ptr = gg;
 
 	while (*ptr)
 	{
@@ -45,23 +45,35 @@ void my_free(char **gg)
  */
 void *_realloc(void *ptr, unsigned int old_size, unsigned int recent_size)
 {
-	char *p;
+	 void *recent_ptr;
 
-	if (!ptr)
-	return (malloc(recent_size));
-	if (!recent_size)
-		return (free(ptr), NULL);
-	if (recent_size == old_size)
-	return (ptr);
+  if (recent_size == old_size)
+    return (ptr);
 
-	p = malloc(recent_size);
-	if (!p)
-	return (NULL);
+  if (ptr == NULL)
+  {
+    recent_ptr = malloc(recent_size);
+    if (recent_ptr == NULL)
+      return (NULL);
+    return (recent_ptr);
+  }
 
-	unsigned int size  = old_size < recent_size ? old_size : recent_size;
+  if (recent_size == 0)
+  {
+    free(ptr);
+    return (NULL);
+  }
 
-	while (old_size--)
-	p[old_size] = ((char *)ptr)[old_size];
-	free(ptr);
-	return (p);
+  recent_ptr = malloc(recent_size);
+  if (recent_ptr == NULL)
+    return (NULL);
+
+  /* Copy the contents from the old block to the new block */
+  if (recent_size < old_size)
+    old_size = recent_size;
+  memcpy(recent_ptr, ptr, old_size);
+
+  free(ptr);
+  return (recent_ptr);
 }
+

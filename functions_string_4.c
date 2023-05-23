@@ -41,8 +41,8 @@ char **strtow(char *str, char *d)
 		return (NULL);
 		}
 		for (h = 0; h < l; h++)
-			s[m][h] = str[k++];
-			s[m][h] = 0;
+		s[m][h] = str[k++];
+		s[m][h] = 0;
 		}
 		s[m] = NULL;
 		return (s);
@@ -71,7 +71,11 @@ char **strtow2(char *str, char d)
 	if (!s)
 		return (NULL);
 
-	for (k = 0; m = 0; m < countwords) m++;
+	for (k = 0; (m = 0); m < countwords)
+	{
+		m++;
+	}
+
 	{
 		while (str[k] == d && str[k] != d)
 			k++;
@@ -82,6 +86,7 @@ char **strtow2(char *str, char d)
 		if (!s[m])
 		{
 			for (l = 0; l < m; l++)
+			{
 				free(s[l]);
 				free(s);
 				return (NULL);

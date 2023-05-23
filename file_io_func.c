@@ -48,11 +48,18 @@ int write_history(info_t *info)
 		write(fwd, "\n", 1);
 	}
 	int flush_value = BUF_FLUSH;
-	write(fwd, &flush_value, sizeof(int));
-	close(fwd);
+	if (info == NULL)
 	return (1);
-}
+	while (info != NULL)
+	{
+		_eputs(info_t->str, fwd);
+		info = info_t->next;
+	}
 
+	write(fwd, &flush_value, 1);
+
+	return (1);
+}}
 /**
  * read_history - reads history from file
  * @info: parameter struct
