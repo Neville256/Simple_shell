@@ -130,7 +130,7 @@ int replace_vars(info_t *info)
 		if (node)
 		{
 			restore_string(&(info->argv[k]),
-				_strdup(_strchr(node->str, '=') + 1));
+				_strdup((const char*) strchr(node->str, '=') + 1));
 			continue;
 		}
 		restore_string(&(info->argv[k]), _strdup(""));

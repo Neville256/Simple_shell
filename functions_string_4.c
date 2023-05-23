@@ -71,7 +71,7 @@ char **strtow2(char *str, char d)
 	if (!s)
 		return (NULL);
 
-	for (k = 0; m = 0; m < countwords; m++)
+	for (k = 0; m = 0; m < countwords) m++;
 	{
 		while (str[k] == d && str[k] != d)
 			k++;

@@ -44,10 +44,11 @@ int write_history(info_t *info)
 		return (-1);
 	for (node = info->history; node; node = node->next)
 	{
-		_eputs(node->str, fwd);
+		_eputs(node->str);
 		write(fwd, "\n", 1);
 	}
-	write(fwd, &BUF_FLUSH, 1);
+	int flush_value = BUF_FLUSH;
+	write(fwd, &flush_value, sizeof(int));
 	close(fwd);
 	return (1);
 }
