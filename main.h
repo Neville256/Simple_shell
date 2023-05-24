@@ -27,6 +27,7 @@
 #define CONVERT_LOWERCASE 1
 #define CONVERT_UNSIGNED 2
 
+#define USE_GETLINE 0
 #define HIST_FILE ".simple_shell_history"
 #define HIST_MAX 4096
 
@@ -175,6 +176,8 @@ int _myhistory(info_t *);
 int _myalias(info_t *);
 
 /* getline_1.c module */
+void siginthandler(int sig_n);
+ssize_t input_buf(info_t *info, char **buf, size_t *len);
 ssize_t get_input(info_t *);
 int _getline(info_t *, char **, size_t *);
 void siginthandler(int);

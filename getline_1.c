@@ -13,7 +13,7 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
 	ssize_t q = 0;
 	size_t len_b = 0;
 
-	if (!*len)/* fill buffer if nothing left*/
+	if (!*len)
 	{
 		/*bfree((void **)info->cmd_buf);*/
 		free(*buf);
@@ -24,17 +24,17 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
 #else
 		q = _getline(info, buf, &len_b);
 #endif
+
 		if (q > 0)
 		{
 			if ((*buf)[q - 1] == '\n')
 			{
-				(*buf[q - 1] = '\0');/*trailing new line remove*/
+				(*buf[q - 1] = '\0');
 				 q--;
 			}
 			info->linecount_flag = 1;
 			remove_comments(*buf);
 			build_history_list(info, *buf, info->histcount++);
-			/* if (_strchr(*buf, ';')) command chain */
 			{
 				*len = q;
 				info->cmd_buf = buf;
@@ -43,6 +43,7 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
 	}
 	return (q);
 }
+
 /**
  * get_input - subtract newline get line
  * @info: struct param
@@ -62,11 +63,11 @@ ssize_t get_input(info_t *info)
 		return (-1);
 	if (len) /* chain buffer left in commands */
 	{
-		l = k; /* current buf position to new int iterator*/
-		p = buf + k; /* return get pointer */
+		l = k;
+		p = buf + k;
 
 		check_chain(info, buf, &l, len, 1024);
-		while (l < len) /* end semicolon to iteration */
+		while (l < len)
 		{
 			if (is_chain(info, buf, &l))
 				break;
@@ -83,4 +84,15 @@ ssize_t get_input(info_t *info)
 	}
 	*buf_p = buf;
 	return (q);
+}
+
+/**
+* siginthandler - a fuction that invoked for a signal
+* function and show the prompt
+* @sig_n: number of the signal
+*/
+void siginthandler(int sig_n)
+{
+	(void) sig_n;
+	write(STDOUT_FILENO, "\n#cisfun$ ", 10);
 }
