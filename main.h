@@ -181,8 +181,8 @@ int _myalias(info_t *);
 
 /*getline_1.c module */
 ssize_t get_input(info_t *info);
-int _getline(info_t *, char **, size_t *);
-void signthandler(int);
+int _getline(info_t *, char **buffs, size_t *);
+void signthandler(int siginthandler);
 
 /* info_1.c module */
 void clear_info(info_t *);
