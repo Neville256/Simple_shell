@@ -65,7 +65,7 @@ ssize_t get_input(info_t *info)
 		l = k; /* current buf position to new int iterator*/
 		p = buf + k; /* return get pointer */
 
-		check_chain(info, buf, &l, len);
+		check_chain(info, buf, &l, len, 1024);
 		while (l < len) /* end semicolon to iteration */
 		{
 			if (is_chain(info, buf, &l))
