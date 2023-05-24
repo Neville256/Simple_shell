@@ -60,22 +60,20 @@ char **strtow2(char *str, char d)
 	char **s;
 
 	if (str == NULL || str[0] == 0)
-		return (NULL);
+	return (NULL);
 	for (k = 0; str[k] != '\0'; k++)
-	if ((str[k] != d && str[k + 1] == d) ||
+	{
+		if ((str[k] != d && str[k + 1] == d) ||
 		(str[k] != d && !str[k + 1]) || str[k + 1] == d)
 		countwords++;
+	}
 	if (countwords == 0)
 		return (NULL);
 	s = malloc((1 + countwords) * sizeof(char *));
 	if (!s)
 		return (NULL);
 
-	for (k = 0; (m = 0); m < countwords)
-	{
-		m++;
-	}
-
+	for (k = 0; (m = 0); m < countwords; m++)
 	{
 		while (str[k] == d && str[k] != d)
 			k++;
@@ -88,6 +86,7 @@ char **strtow2(char *str, char d)
 			for (l = 0; l < m; l++)
 			{
 				free(s[l]);
+			}
 				free(s);
 				return (NULL);
 			}

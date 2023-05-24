@@ -25,6 +25,7 @@ void my_free(char **gg)
 {
 
 	char **ptr;
+
 	ptr = gg;
 
 	while (*ptr)
@@ -47,33 +48,32 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int recent_size)
 {
 	 void *recent_ptr;
 
-  if (recent_size == old_size)
-    return (ptr);
+	if (recent_size == old_size)
+	return (ptr);
 
-  if (ptr == NULL)
-  {
-    recent_ptr = malloc(recent_size);
-    if (recent_ptr == NULL)
-      return (NULL);
-    return (recent_ptr);
-  }
+	if (ptr == NULL)
+	{
+	recent_ptr = malloc(recent_size);
+	if (recent_ptr == NULL)
+	return (NULL);
+	return (recent_ptr);
+	}
 
-  if (recent_size == 0)
-  {
-    free(ptr);
-    return (NULL);
-  }
+	if (recent_size == 0)
+	{
+	free(ptr);
+	return (NULL);
+	}
 
-  recent_ptr = malloc(recent_size);
-  if (recent_ptr == NULL)
-    return (NULL);
+	recent_ptr = malloc(recent_size);
+	if (recent_ptr == NULL)
+	return (NULL);
 
   /* Copy the contents from the old block to the new block */
-  if (recent_size < old_size)
-    old_size = recent_size;
-  memcpy(recent_ptr, ptr, old_size);
+	if (recent_size < old_size)
+	old_size = recent_size;
+	memcpy(recent_ptr, ptr, old_size);
 
-  free(ptr);
-  return (recent_ptr);
+	free(ptr);
+	return (recent_ptr);
 }
-

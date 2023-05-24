@@ -15,39 +15,37 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
 
 	if (!*len)
 	{
-<<<<<<< HEAD
-		/*bfree((void **)info->cmd_buf);*/
-		free(*buf);
-=======
-		free(*buffs);
->>>>>>> 24e06b77e9c311a4b6c14a1a02e6788bb4654b80
-		*buf = NULL;
-		signal(SIGINT, signthandler);
-#if USE_GETLINE
-		r = getline(buffs, &len_p, stdin);
-#else
-		r = _getline(info, buf, &len_p);
-#endif
-		if (r > 0)
+
+	/*bfree((void **)info->cmd_buf);*/
+	free(*buf);
+
+	free(*buffs);
+	*buf = NULL;
+	signal(SIGINT, signthandler);
+	#if USE_GETLINE
+	r = getline(buffs, &len_p, stdin);
+	#else
+	r = _getline(info, buf, &len_p);
+	#endif
+	if (r > 0)
+	{
+		if ((*buf)[r - 1] == '\n')
 		{
-			if ((*buf)[r - 1] == '\n')
-			{
-<<<<<<< HEAD
-				(*buf)[r - 1] = '\0'; /* remove trailing newline */
-				r--;
+
+			(*buf)[r - 1] = '\0'; /* remove trailing newline */
+			r--;
 			}
 			info->lineamount_flag = 1;
 			comments_remove(*buf);
 			build_history_list(info, *buf, info->histcount++);
 			/* if (_strchr(*buf, ';')) is this a command chain? */
-=======
-				(*buffs)[r - 1] = '\0';
-				r--;
+
+			(*buffs)[r - 1] = '\0';
+			r--;
 			}
 			info->lineamount_flag = 1;
 			comments_remove(*buffs);
 			build_history_list(info, *buffs, info->histcount++);
->>>>>>> 24e06b77e9c311a4b6c14a1a02e6788bb4654b80
 			{
 				*len = r;
 				info->cmd_buf = buf;
@@ -65,21 +63,20 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
  */
 ssize_t get_input(info_t *info)
 {
-<<<<<<< HEAD
-	char *o = *buf_p;
-	static char *buffs; /* the ';' command chain buffer */
-=======
-	static char *buffs;
->>>>>>> 24e06b77e9c311a4b6c14a1a02e6788bb4654b80
-	static size_t k, l, len;
+
+	char *o = *(info->buf_p);
+	char *buffs = NULL; /* the ';' command chain buffer */
+
+	size_t k = 0, l = 0 , len = 0;
 	ssize_t r = 0;
-	char **buf_p = &(info->arg), *p;
+	char **buf_p = &(info->arg),
+	char *p;
 
 	_putchar(BUF_FLUSH);
 	r = input_buf(info, &buffs, &len);
 	if (r == -1)
 		return (-1);
-	if (len)
+	if (len > 0)
 	{
 		l = k;
 		p = buffs + k;
@@ -103,15 +100,9 @@ ssize_t get_input(info_t *info)
 		return (_strlen(o));
 	}
 
-<<<<<<< HEAD
-	*buf_p = buf_p; /* else not a chain, pass back buffer from _getline() */
-	return (r); /* return length of buffer from _getline() */
-=======
-	*buf_p = buf;
+	*(buf_p) = info->buf;
 	return (r);
->>>>>>> 24e06b77e9c311a4b6c14a1a02e6788bb4654b80
-}
-
+}}
 /**
  * read_buf - reads a buffer
  * @info: parameter struct

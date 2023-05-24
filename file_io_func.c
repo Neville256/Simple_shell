@@ -48,6 +48,7 @@ int write_history(info_t *info)
 		write(fwd, "\n", 1);
 	}
 	int flush_value = BUF_FLUSH;
+
 	if (info == NULL)
 	return (1);
 	while (info != NULL)
