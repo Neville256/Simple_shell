@@ -21,57 +21,57 @@ void _eputs(char *str)
 
 /**
  * _eputchar - writes character d to stderr
- * @d: The character to print
+ * @c: The character to print
  *
  * Return: On success 1.
  * On error, -1 is returned, errno is set appropriately.
  */
-int _eputchar(char d)
+int _eputchar(char c)
 {
 	static int k;
-	static char buffs[NOTE_BUF_SIZE];
+	static char buf[WRITE_BUF_SIZE];
 
-	if (d == BUF_FLUSH || k >= NOTE_BUF_SIZE)
+	if (c == BUF_FLUSH || k >= WRITE_BUF_SIZE)
 	{
-		write(2, buffs, k);
+		write(2, buf, k);
 		k = 0;
 	}
-	if (d != BUF_FLUSH)
-		buffs[k++] = d;
+	if (c != BUF_FLUSH)
+		buf[k++] = c;
 	return (1);
 }
 
 /**
- * _putfwd - writes the character d to given fwd
- * @d: character to print
- * @fwd: filedescriptor to write to
+ * _putfd - writes the character d to given fwd
+ * @c: character to print
+ * @fd: filedescriptor to write to
  *
  * Return: On success 1.
  * On error, -1 is returned, errno is set appropriately.
  */
-int _putfwd(char d, int fwd)
+int _putfd(char c, int fd)
 {
 	static int k;
-	static char buffs[NOTE_BUF_SIZE];
+	static char buf[WRITE_BUF_SIZE];
 
-	if (d == BUF_FLUSH || k >= NOTE_BUF_SIZE)
+	if (c == BUF_FLUSH || k >= WRITE_BUF_SIZE)
 	{
-		write(fwd, buffs, k);
+		write(fd, buf, k);
 		k = 0;
 	}
-	if (d != BUF_FLUSH)
-		buffs[k++] = d;
+	if (c != BUF_FLUSH)
+		buf[k++] = c;
 	return (1);
 }
 
 /**
- *_putsfwd - prints an input string
+ *_putsfd - prints an input string
  * @str: the string to be printed
- * @fwd: the filedescriptor to write to
+ * @fd: the filedescriptor to write to
  *
  * Return: number of chars put
  */
-int _putsfwd(char *str, int fwd)
+int _putsfd(char *str, int fd)
 {
 	int k = 0;
 
@@ -79,7 +79,7 @@ int _putsfwd(char *str, int fwd)
 		return (0);
 	while (*str)
 	{
-		k += _putfwd(*str++, fwd);
+		k += _putfd(*str++, fd);
 	}
 	return (k);
 }

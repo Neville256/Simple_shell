@@ -18,10 +18,10 @@ char *_memset(char *s, char b, unsigned int n)
 }
 
 /**
- * my_free - string of strings free
+ * ffree - string of strings free
  * @gg: strings of a string
  */
-void my_free(char **gg)
+void ffree(char **gg)
 {
 
 	char **ptr;

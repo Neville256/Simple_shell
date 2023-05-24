@@ -44,12 +44,12 @@ char *_strdup(const char *str)
 	return (bret);
 }
 /**
- * _place - string input executed
+ * _puts - string input executed
  * @str: print string
  *
  * Return: 0
  */
-void _place(char *str)
+void _puts(char *str)
 {
 	int k = 0;
 
@@ -70,9 +70,9 @@ void _place(char *str)
 int _putchar(char c)
 {
 	static int k;
-	static char buf[NOTE_BUF_SIZE];
+	static char buf[WRITE_BUF_SIZE];
 
-if (c == BUF_FLUSH || k >= NOTE_BUF_SIZE)
+if (c == BUF_FLUSH || k >= WRITE_BUF_SIZE)
 {
 	write(1, buf, k);
 	k = 0;
