@@ -10,7 +10,7 @@ int interactive(info_t *info)
 	return (isatty(STDIN_FILENO) && info->scanfd <= 2);
 }
 /**
- * is_delim - delimter
+ * is_delim - delimter of char checks
  * @c: check char
  * @delim: string of delimeter
  * Return: 1 true, false 0
@@ -25,7 +25,6 @@ int is_delim(char c, char *delim)
 /**
  * _isalpha - alphabet character check
  * @c: check char
- * @delim: string of delimeter
  * Return: 1 true, 0 false.
  */
 int _isalpha(int c)

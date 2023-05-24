@@ -34,7 +34,6 @@ char **strtow2(char *str, char d)
 		l = 0;
 		while (str[k + l] != d && str[k + l] && str[k + l] != d)
 			l++;
-
 		s[m] = malloc((l + 1) * sizeof(char));
 		if (!s[m])
 		{
