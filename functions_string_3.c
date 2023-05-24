@@ -1,4 +1,5 @@
 #include "main.h"
+
 /**
  * _strncpy - string copied
  * @dest: copied string to dest
@@ -35,7 +36,7 @@ char *_strncpy(char *dest, char *src, int n)
  * @n: count bytes maximal used
  * Return: joins string
  */
-char *_strncat(char *dest, char *src, int n)
+char *_strncat(char *dest, const char *src, int n)
 {
 	int k, m;
 	char *s = dest;

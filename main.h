@@ -13,8 +13,8 @@
 #include <errno.h>
 
 /* this will read and write buffers */
-#define SCAN_BUF_SIZE 1024
-#define NOTE_BUF_SIZE 1024
+#define READ_BUF_SIZE 1024
+#define WRITE_BUF_SIZE 1024
 #define BUF_FLUSH -1
 
 /* these are commands used for chaining */
@@ -24,12 +24,8 @@
 #define CMD_CHAIN 3
 
 /* This will transform_number() */
-#define TRANSFORM_LOWERCASE 1
-#define TRANSFORM_UNSIGNED 2
-
-/*1 will use as system getline() */
-#define UTILIZE__GETLINE 0
-#define UTILIZE_STRTOK 0
+#define CONVERT_LOWERCASE 1
+#define CONVERT_UNSIGNED 2
 
 #define HIST_FILE ".simple_shell_history"
 #define HIST_MAX 4096
@@ -57,9 +53,9 @@ typedef struct liststr
  *@argv: arguments of an array produced strings
  *@path: recent command of a string path
  *@argc: count the argument of a string array
- *@line_amount: counts the error
+ *@line_count: counts the error
  *@err_num: exit()s error code
- *@lineamount_flag: input line count
+ *@linecount_flag: input line count
  *@fname: filename program
  *@env: copy eviron linked list copies
  *@environ: LL env copy of envioron copy
@@ -68,8 +64,8 @@ typedef struct liststr
  *@env_changed: changed environ
  *@status: last exec command returned
  *@cmd_buf: cmd_buf address to pointer, on if chaining
- *@cmd_buf_types: CMD_type ||, &&, ;
- *@scanfd: read line input for fd
+ *@cmd_buf_type: CMD_type ||, &&, ;
+ *@readfd: read line input for fd
  *@histcount: number count the history
  */
 typedef struct passinfo
@@ -78,9 +74,9 @@ typedef struct passinfo
 	char **argv;
 	char *path;
 	int argc;
-	unsigned int line_amount;
+	unsigned int line_count;
 	int err_num;
-	int lineamount_flag;
+	int linecount_flag;
 	char *fname;
 	list_t *env;
 	list_t *history;
@@ -90,8 +86,8 @@ typedef struct passinfo
 	int status;
 
 	char **cmd_buf;
-	int cmd_buf_types;
-	int scanfd;
+	int cmd_buf_type;
+	int readfd;
 	int histcount;
 } info_t;
 
@@ -124,8 +120,8 @@ int loophsh(char **);
 /* err_functions_string_1.c */
 void _eputs(char *);
 int _eputchar(char);
-int _putfwd(char d, int fwd);
-int _putsfwd(char *str, int fwd);
+int _putfd(char c, int fd);
+int _putsfd(char *str, int fd);
 
 /* functions_string_1.c */
 int _strlen(char *);
@@ -134,16 +130,15 @@ char *starts_with(const char *, const char *);
 char *_strcat(char *, char *);
 
 /* functions_string_2.c */
-char *my_strcpy(char *, char *);
+char *_strcpy(char *, char *);
 char *_strdup(const char *);
-void _place(char *);
+void _puts(char *);
 int _putchar(char);
 
 /* functions_string_3.c */
-char *my_strncpy(char*, char*, int);
-char *_strdup(const char *);
-void _place(char *);
-int _putchar(char);
+char *_strncpy(char *, char *, int);
+char *_strncat(char *, const char *src, int n);
+char *_strchr(char *, char);
 
 /*functions_string_4.c */
 char **strtow(char *, char *);
@@ -151,7 +146,7 @@ char **strtow2(char *, char);
 
 /* functions_memory_1.c */
 char *_memset(char *, char, unsigned int);
-void my_free(char **);
+void ffree(char **);
 void *_realloc(void*, unsigned int, unsigned int);
 
 /* functions_memory_2.c */
@@ -168,7 +163,7 @@ int _erratoi(char *);
 void print_error(info_t *, char *);
 int print_d(int, int);
 char *convert_number(long int, int, int);
-void comments_remove(char *);
+void remove_comments(char *);
 
 /*emulators_builtin.c */
 int _myexit(info_t *);
@@ -178,11 +173,6 @@ int _myhelp(info_t *);
 /*emulators_builtin_2.c */
 int _myhistory(info_t *);
 int _myalias(info_t *);
-
-/*getline_1.c module */
-ssize_t get_input(info_t *info);
-int _getline(info_t *, char **buffs, size_t *);
-void signthandler(int siginthandler);
 
 /* info_1.c module */
 void clear_info(info_t *);
@@ -204,14 +194,14 @@ int _setenv(info_t *, char *, char *);
 /* file_io_functions.c */
 char *get_history_file(info_t *info);
 int write_history(info_t *info);
-int scan_history(info_t *info);
-int build_history_list(info_t *info, char *buf, int lineamount);
+int read_history(info_t *info);
+int build_history_list(info_t *info, char *buf, int linecount);
 int renumber_history(info_t *info);
 
 /* liststr_1.c */
 list_t *add_node(list_t **, const char *, int);
 list_t *add_node_end(list_t **, const char *, int);
-size_t print_list(const list_t *);
+size_t print_list_str(const list_t *);
 int delete_node_at_index(list_t **, unsigned int);
 void free_list(list_t **);
 
@@ -223,10 +213,9 @@ list_t *node_starts_with(list_t *, char *, char);
 ssize_t get_node_index(list_t *, list_t *);
 
 /* chain_1.c */
-int is_chain(info_t *, char *buf, size_t *o);
+int is_chain(info_t *, char *, size_t *);
 void check_chain(info_t *, char *, size_t *, size_t, size_t);
-int restore_alias(info_t *);
-int restore_vars(info_t *);
-int restore_string(char **, char *);
-
+int replace_alias(info_t *);
+int replace_vars(info_t *);
+int replace_string(char **, char *);
 #endif

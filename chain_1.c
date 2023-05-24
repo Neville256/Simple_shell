@@ -16,18 +16,18 @@ int is_chain(info_t *info, char *buf, size_t *o)
 	{
 		buf[l] = 0;
 		l++;
-		info->cmd_buf_types = CMD_OR;
+		info->cmd_buf_type = CMD_OR;
 	}
 	else if (buf[l] == '&' && buf[l + 1] == '&')
 	{
 		buf[l] = 0;
 		l++;
-		info->cmd_buf_types = CMD_AND;
+		info->cmd_buf_type = CMD_AND;
 	}
 	else if (buf[l] == ';')
 	{
 		buf[l] = 0;
-		info->cmd_buf_types = CMD_CHAIN;
+		info->cmd_buf_type = CMD_CHAIN;
 	}
 	else
 		return (0);
@@ -49,7 +49,7 @@ void check_chain(info_t *info, char *buf, size_t *o, size_t k, size_t len)
 {
 	size_t l = *o;
 
-	if (info->cmd_buf_types == CMD_AND)
+	if (info->cmd_buf_type == CMD_AND)
 	{
 		if (info->status)
 		{
@@ -57,7 +57,7 @@ void check_chain(info_t *info, char *buf, size_t *o, size_t k, size_t len)
 			l = len;
 		}
 	}
-	if (info->cmd_buf_types == CMD_OR)
+	if (info->cmd_buf_type == CMD_OR)
 	{
 		if (!info->status)
 		{
@@ -119,38 +119,38 @@ int replace_vars(info_t *info)
 		{
 			char *value = strchr(node->str, '=') + 1;
 
-			restore_string(&(info->argv[k]), _strdup(value));
+			replace_string(&(info->argv[k]), _strdup(value));
 		}
 		else if (!_strcmp(info->argv[k], "$?"))
 		{
 			char *status_str = convert_number(info->status, 10, 0);
 
-			restore_string(&(info->argv[k]), _strdup(status_str));
+			replace_string(&(info->argv[k]), _strdup(status_str));
 			free(status_str);
 		}
 		else if (!_strcmp(info->argv[k], "$$"))
 		{
 			char *pid_str = convert_number(getpid(), 10, 0);
 
-			restore_string(&(info->argv[k]), _strdup(pid_str));
+			replace_string(&(info->argv[k]), _strdup(pid_str));
 			free(pid_str);
 		}
 		else
 		{
-			restore_string(&(info->argv[k]), _strdup(""));
+			replace_string(&(info->argv[k]), _strdup(""));
 		}
 	}
 	return (1);
 }
 
 /**
- * restore_string - replaces a string
+ * replace_string - replaces a string
  * @old: address of old string
  * @new: new string
  *
  * Return: 1 if replaced, 0 otherwise
  */
-int restore_string(char **old, char *new)
+int replace_string(char **old, char *new)
 {
 	free(*old);
 	*old = new;

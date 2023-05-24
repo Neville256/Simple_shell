@@ -36,7 +36,7 @@ void print_error(info_t *info, char *estr)
 {
 	_eputs(info->fname);
 	_eputs(": ");
-	print_d(info->line_amount, STDERR_FILENO);
+	print_d(info->line_count, STDERR_FILENO);
 	_eputs(": ");
 	_eputs(info->argv[0]);
 	_eputs(": ");
@@ -98,12 +98,12 @@ char *convert_number(long int num, int base, int flags)
 	char *ptr;
 	unsigned long d = num;
 
-	if (!(flags & TRANSFORM_UNSIGNED) && num < 0)
+	if (!(flags & CONVERT_UNSIGNED) && num < 0)
 	{
 		d = -num;
 		sign = '-';
 	}
-	array = flags & TRANSFORM_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
+	array = flags & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
 	ptr = &buffer[49];
 	*ptr = '\0';
 
@@ -117,12 +117,12 @@ char *convert_number(long int num, int base, int flags)
 	return (ptr);
 }
 /**
- * comments_remove - replace function of '#' with '0'
+ * remove_comments - replace function of '#' with '0'
  * @buf: string modifed to address
  *
  * Return: 0;
  */
-void comments_remove(char *buf)
+void remove_comments(char *buf)
 {
 	int k;
 
