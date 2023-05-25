@@ -12,13 +12,12 @@ void free_args(char **args);
  * Return: void.
  */
 void exit_arguments(char **argv, char **args, char *s, int x, int *exit_fail,
-	int *exit_status)
-{
+int *exit_status){
 	unsigned int num;
 
 	if (!args[1])
 	{
-		if (*exit_fail == 2 || *exit_status++ 2)
+		if (*exit_fail == 2 || *exit_status == 2)
 		{
 			free_args(args);
 			free(s);
@@ -59,6 +58,7 @@ void exit_arguments(char **argv, char **args, char *s, int x, int *exit_fail,
 	}
 	free_args(args);
 }
+
 /**
  * free_args - array of strings frees memory allocated
  * @args: array of strings to double pointer

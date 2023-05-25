@@ -17,7 +17,7 @@ int _strncmp(char *str1, char *str2, size_t n)
 	{
 		if (str1[m] != str2[m])
 			return (str1[m] - str2[m]);
-		if (str1[i] == '\0')
+		if (str1[m] == '\0')
 			return (0);
 	}
 	return (0);
@@ -100,7 +100,7 @@ int _strcmp(char *s1, char *s2)
 char *_strcat(char *path, char *command)
 {
 	int x;
-	unsigned int k, k, path_len, command_len, sizebuff;
+	unsigned int k, l, path_len, command_len, sizebuff;
 	char *p;
 
 	(void) x;

@@ -32,7 +32,7 @@ void command_error(char *argv, char *cmd, int count, int check_path,
 	x = write(STDERR_FILENO, ": ", 2);
 	x = write(STDERR_FILENO, cmd, _strlen(cmd));
 	x = write(STDERR_FILENO, ": ", 2);
-	if (_strcmp(sterror(errno), "Permission denied") == 0)
+	if (_strcmp(strerror(errno), "Permission denied") == 0)
 	{
 		perror("");
 		*exit_status = 126;

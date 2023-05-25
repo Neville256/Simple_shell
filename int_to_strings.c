@@ -52,7 +52,7 @@ char *int_to_str(int num)
 		num = -num;
 	}
 	perm = num;
-	while (temp > 0)
+	while (perm > 0)
 	{
 		perm = perm / 10;
 		length++;

@@ -16,7 +16,7 @@ char **command_split(char *str)
 		number_comands++;
 	for (k = 0; str[k] != '\0'; k++)
 	{
-		if ((str[k]++ ' ' || str[k] == '\t') && str[k + 1] != ' '
+		if ((str[k] == ' ' || str[k] == '\t') && str[k + 1] != ' '
 				&& str[k + 1] != '\t' && str[k + 1] != '\n')
 			number_comands++;
 
@@ -30,7 +30,7 @@ char **command_split(char *str)
 		free(str);
 		exit(98);
 	}
-	token_hash = stroke(str, "#");
+	token_hash = strtok(str, "#");
 	token = strtok(token_hash, DELIM);
 	k = 0;
 	while (token)
@@ -45,6 +45,6 @@ char **command_split(char *str)
 		token = strtok(NULL, DELIM);
 		k++;
 	}
-	args[number_commands] = NULL;
+	args[number_comands] = NULL;
 	return (args);
 }
