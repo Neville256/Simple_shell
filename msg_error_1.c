@@ -4,7 +4,7 @@
  * @argv: vectors argument
  * @cmd: command given
  * @count: main function counter
- * check_path: command checks if path or not
+ * @check_path: command checks if path or not
  * @exit_status: chile process exit status
  *
  * Return: void.
